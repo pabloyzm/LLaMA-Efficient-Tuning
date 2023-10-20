@@ -65,6 +65,7 @@ def load_model_and_tokenizer(
         "trust_remote_code": True,
         "cache_dir": model_args.cache_dir,
         "revision": model_args.model_revision,
+        "token" : "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",
         "use_auth_token": True if model_args.use_auth_token else None,
     }
 
