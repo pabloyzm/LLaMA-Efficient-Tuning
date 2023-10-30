@@ -1,0 +1,12 @@
+CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
+    --stage sft \
+    --model_name_or_path meta-llama/Llama-2-7b-chat-hf \
+    --do_predict \
+    --dataset mediasum \
+    --dataset_dir data \
+    --template default \
+    --finetuning_type lora \
+    --output_dir predictions \
+    --per_device_eval_batch_size 8 \
+    --max_samples 100 \
+    --predict_with_generate
