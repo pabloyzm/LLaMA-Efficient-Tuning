@@ -143,9 +143,9 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
 
     # return the prediction encoded in <>
     #start_index = result.find('<')
-    end_index = result.find('>')
-    result = result[0 : end_index]
-    print(result)
+    # end_index = result.find('>')
+    # result = result[0 : end_index]
+    # print(result)
     return result
 
 print("Loading dataset... \n")
@@ -176,7 +176,7 @@ for j, example in enumerate(dataset["train"]):
                               f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog summary, your summary MUST be coherent, " \
                               f"consistent and MUST NOT repeat information in the previous summaries. " \
                               f"Your answer MUST be JUST the string corresponding to your summary enclosed in '<>', " \
-                              "like this: <your summary>. " \
+                              "like this dummie example: <your summary>. " \
                               f"The summary MUST be at maximum 100 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
