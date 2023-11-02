@@ -144,7 +144,7 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
     prediction_file = os.path.join(output_dir, 'generated_predictions.jsonl')
     with open(prediction_file, 'r') as pred_file:
         prediction = json.loads(pred_file.readline())
-    return json.loads(prediction['predict'].replace("'",'"'))['summary']
+    return json.loads(prediction['predict'])['summary']
 
 print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
