@@ -164,7 +164,7 @@ for j, example in enumerate(dataset["train"]):
     total_windows = number_of_sequences // context_size
     history = []
     for i in range(total_windows):
-        state = "continue" if i > 0 and i < total_windows - 1 else "end" if i == total_windows - 1 else "start"
+        state = "continue" if i > 0 else "start"
         if i > 0:
             context = "\n".join(history)
         else:
