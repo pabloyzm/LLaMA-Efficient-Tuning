@@ -145,6 +145,7 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
     start_index = result.find('<')
     end_index = result.find('>')
     result = result[start_index+1:end_index]
+    print(result)
     return result
 
 print("Loading dataset... \n")
