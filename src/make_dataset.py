@@ -177,7 +177,7 @@ for j, example in enumerate(dataset["train"]):
                               f"\n\n Conversation: " \
                               f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###"
         # output = eval(example["original dialog info"])["summary"]
-        res_ = generate_prediction(json_output[-1])
+        res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
         if state == "start" or state == "continue":
             print("Generating prediction for sample: ", j, ", fragment: ", i)
             history.append(res_)
