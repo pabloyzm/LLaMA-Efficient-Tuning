@@ -38,6 +38,16 @@
       "response": "output"
     }
   },
+  ,
+    "mediasum-sampled": {
+    "file_name": "sampled.json",
+    "file_sha1": "",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
   "oaast_sft_zh": {
     "file_name": "oaast_sft_zh.json",
     "file_sha1": "a6a91f18f80f37b10ded9cf633fb50c033bf7b9f",
