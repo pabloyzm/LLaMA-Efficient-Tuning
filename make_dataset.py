@@ -87,7 +87,8 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
     return json.loads(prediction[0]['predict'].replace("'",'"'))['summary']
 
 print("Loading dataset... \n")
-dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum')
+# load dataset avoiding timeout and print progress
+dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data', download_mode='force_redownload')
 sub_sample = 0
 json_output = []
 
