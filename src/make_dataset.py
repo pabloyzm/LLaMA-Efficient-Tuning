@@ -170,9 +170,7 @@ for j, example in enumerate(dataset["train"]):
                               f"If the dialog state is 'start' you won't be given any context. " \
                               f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog contexts, your summary MUST be coherent, " \
                               f"consistent and MUST NOT repeat information in the previous contexts. " \
-                              f"Your answer MUST be in JSON format, with the following structure: " \
-                              f"{{'summary': 'your summary or continuation'}} " \
-                              f"where 'summary' is a string with your summary. " \
+                              f"Your answer MUST be just a string with your summary. " \
                               f"The summary MUST be at maximum 100 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Context: {context} " \
