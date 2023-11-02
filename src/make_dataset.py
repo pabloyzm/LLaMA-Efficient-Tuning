@@ -175,9 +175,9 @@ for j, example in enumerate(dataset["train"]):
                               f"If the dialog state is 'start' you won't be given any summary. " \
                               f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog summary, your summary MUST be coherent, " \
                               f"consistent and MUST NOT repeat information in the previous summaries. " \
-                              f"Your answer MUST be JUST the string corresponding to your summary enclosed in '<>', " \
-                              "like this dummie example: <your summary>. " \
-                              f"The summary MUST be at maximum 100 words long. " \
+                              f"Your answer MUST be in this format: " \
+                              f"\n\n Summary: ### your summary ### " \
+                              f"The Summary MUST be at maximum 100 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
                               f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###" \
