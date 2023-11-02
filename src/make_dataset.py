@@ -177,7 +177,7 @@ for j, example in enumerate(dataset["train"]):
                               f"consistent and MUST NOT repeat information in the previous contexts. " \
                               f"Your answer MUST be JUST the string corresponding to your summary enclosed in '<>', " \
                               "like this: <your summary>. " \
-                              f"The summary MUST be at maximum 100 words long. " \
+                              f"The summary MUST be at maximum 50 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Context: {context} " \
                               f"\n\n Conversation: " \
