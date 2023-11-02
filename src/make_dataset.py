@@ -141,7 +141,7 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
         trainer.save_metrics("predict", predict_results.metrics)
         result = trainer.get_predictions(predict_results)
 
-    return result
+    return dict(result)['summary']
 
 print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
@@ -189,7 +189,7 @@ for j, example in enumerate(dataset["train"]):
         break
 
 # Define the file path where you want to save the JSON file
-output_file_path = '../data/mediasum-sampled.json'
+output_file_path = 'data/mediasum-sampled.json'
 
 # Write the `json_output` to a JSON file
 with open(output_file_path, 'w') as json_file:
