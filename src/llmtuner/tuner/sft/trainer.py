@@ -97,5 +97,29 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         with open(output_prediction_file, "w", encoding="utf-8") as writer:
             res: List[str] = []
             for pred, _ in zip(decoded_preds, decoded_labels):
-                res.append(json.dumps({"predict": pred.replace('"', "´").replace("'",'"')}, ensure_ascii=False))
+                res.append(json.dumps({"predict": pred}, ensure_ascii=False))
             writer.write("\n".join(res))
+
+    def get_predictions(
+        self,
+        predict_results: "PredictionOutput"
+    ) -> None:
+        r"""
+        Saves model predictions to `output_dir`.
+
+        A custom behavior that not contained in Seq2SeqTrainer.
+        """
+        if not self.is_world_process_zero():
+            return
+
+        output_prediction_file = os.path.join(self.args.output_dir, "generated_predictions.jsonl")
+        logger.info(f"Saving prediction results to {output_prediction_file}")
+
+        preds = np.where(predict_results.predictions != IGNORE_INDEX, predict_results.predictions, self.tokenizer.pad_token_id)
+        labels = np.where(predict_results.label_ids != IGNORE_INDEX, predict_results.label_ids, self.tokenizer.pad_token_id)
+
+        decoded_preds = self.tokenizer.batch_decode(preds, skip_special_tokens=True, clean_up_tokenization_spaces=True)
+        decoded_labels = self.tokenizer.batch_decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=True)
+
+        for pred, _ in zip(decoded_preds, decoded_labels):
+            return pred

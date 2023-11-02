@@ -139,12 +139,9 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
             predict_results.metrics.pop("predict_loss", None)
         trainer.log_metrics("predict", predict_results.metrics)
         trainer.save_metrics("predict", predict_results.metrics)
-        trainer.save_predictions(predict_results)
+        result = trainer.get_predictions(predict_results)
 
-    prediction_file = os.path.join(output_dir, 'generated_predictions.jsonl')
-    with open(prediction_file, 'r') as pred_file:
-        prediction = json.loads(pred_file.readline())
-    return json.loads(prediction['predict'])['summary']
+    return result
 
 print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
@@ -188,8 +185,8 @@ for j, example in enumerate(dataset["train"]):
             history.append(generate_prediction(json_output[-1]))
         elif state == "end":
             history = []
-        if j == sub_sample:
-            break
+    if j == sub_sample:
+        break
 
 # Define the file path where you want to save the JSON file
 output_file_path = '../data/mediasum-sampled.json'
