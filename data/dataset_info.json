@@ -39,7 +39,7 @@
     }
   },
     "mediasum-sampled": {
-    "file_name": "sampled.json",
+    "file_name": "mediasum-sampled.json",
     "file_sha1": "",
     "columns": {
       "prompt": "instruction",
