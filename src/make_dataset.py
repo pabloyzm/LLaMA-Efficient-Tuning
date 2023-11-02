@@ -183,11 +183,6 @@ for j, example in enumerate(dataset["train"]):
                               # f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
         # output = eval(example["original dialog info"])["summary"]
         res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
-        if state == "start" or state == "continue":
-            print("Generating prediction for sample: ", j, ", fragment: ", i)
-            #history.append(res_)
-        elif state == "end":
-            #history = []
         json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "output": res_})
     if j == sub_sample:
         break
