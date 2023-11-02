@@ -86,11 +86,12 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
         prediction = json.loads(pred_file.readline())
     return json.loads(prediction[0]['predict'].replace("'",'"'))['summary']
 
-
+print("Loading dataset... \n")
 dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum')
 sub_sample = 0
 json_output = []
 
+print("Generating samples... \n")
 for j, example in enumerate(dataset["train"]):
     prompt = "\n".join([seq for seq in eval(example["original dialog info"])["dialog history"]])
     dialog_sequences = prompt.split('\n')
@@ -121,6 +122,7 @@ for j, example in enumerate(dataset["train"]):
         output = eval(example["original dialog info"])["summary"]
         json_output.append({"instruction": instruction, "input": "", "output": output, "id": j, "state": state})
         if state == "continue":
+            print("Generating prediction for sample: ", j, ", fragment: ", i)
             history.append(generate_prediction(json_output[-1]))
         elif state == "end":
             history = []
