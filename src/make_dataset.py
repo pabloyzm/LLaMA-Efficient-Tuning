@@ -141,6 +141,10 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
         trainer.save_metrics("predict", predict_results.metrics)
         result = trainer.get_predictions(predict_results)
 
+    # return the prediction encoded in <>
+    start_index = result.find('<')
+    end_index = result.find('>')
+    result = result[start_index+1:end_index]
     return result
 
 print("Loading dataset... \n")
@@ -170,7 +174,8 @@ for j, example in enumerate(dataset["train"]):
                               f"If the dialog state is 'start' you won't be given any context. " \
                               f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog contexts, your summary MUST be coherent, " \
                               f"consistent and MUST NOT repeat information in the previous contexts. " \
-                              f"Your answer MUST be just a string with your summary. " \
+                              f"Your answer MUST be JUST the string corresponding to your summary enclosed in '<>', " \
+                              "like this: <your summary>. " \
                               f"The summary MUST be at maximum 100 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Context: {context} " \
