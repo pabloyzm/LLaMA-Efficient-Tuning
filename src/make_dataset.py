@@ -142,8 +142,9 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
         result = trainer.get_predictions(predict_results)
 
     # return the prediction encoded in <>
+    start_index = result.find('<')
     end_index = result.find('>')
-    result = result[0:end_index] + "."
+    result = result[start_index + 1 : end_index] + "."
     print(result)
     return result
 
@@ -170,16 +171,18 @@ for j, example in enumerate(dataset["train"]):
             context = ""
         instruction = f"Summarize the following dialogue between '###', make a brief summary on what happens in it, " \
                               f"DON'T complete it just summarize it. " \
-                              f"You'll be given the dialog state and the previous dialog context, which you have to adapt your summary to. " \
-                              f"If the dialog state is 'start' you won't be given any context. " \
-                              f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog contexts, your summary MUST be coherent, " \
-                              f"consistent and MUST NOT repeat information in the previous contexts. " \
+                              f"You'll be given the dialog state, the conversation and the previous dialog summary, which you have to complete. " \
+                              f"If the dialog state is 'start' you won't be given any summary. " \
+                              f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog summary, your summary MUST be coherent, " \
+                              f"consistent and MUST NOT repeat information in the previous summaries. " \
                               f"Your answer MUST be JUST the string corresponding to your summary enclosed in '<>', " \
                               "like this: <your summary>. " \
                               f"The summary MUST be at maximum 50 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
-                              f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###"
+                              f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###" \
+                              f"\n\n Previous summaries: {' '.join(pre for pre in history) if len(history) > 0 else ''} " \
+                              f"\n\n Your summary: "
         # output = eval(example["original dialog info"])["summary"]
         res_ = generate_prediction({"instruction": instruction, "input": "", "output": "", "summary": context})
         if state == "start" or state == "continue":
