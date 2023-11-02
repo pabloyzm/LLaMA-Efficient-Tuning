@@ -162,7 +162,7 @@ for j, example in enumerate(dataset["train"]):
     context_size = 10
     number_of_sequences = len(dialog_sequences)
     total_windows = number_of_sequences // context_size
-    history = []
+    #history = []
     for i in range(total_windows):
         state = "continue" if i > 0 else "end" if i == total_windows-1 else "start"
         #if i > 0:
@@ -175,6 +175,8 @@ for j, example in enumerate(dataset["train"]):
                               f"Your answer MUST be in this format: " \
                               f"\n\n Summary: ### your summary ### " \
                               f"The Summary MUST be at maximum 100 words long. " \
+                              f"Your answer MUST contain the summary and ONLY the summary. " \
+                              f"Do NOT include any other information. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
                               f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###" \
@@ -183,10 +185,10 @@ for j, example in enumerate(dataset["train"]):
         res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
         if state == "start" or state == "continue":
             print("Generating prediction for sample: ", j, ", fragment: ", i)
-            history.append(res_)
+            #history.append(res_)
         elif state == "end":
-            history = []
-        json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "context": history, "output": res_})
+            #history = []
+        json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "output": res_})
     if j == sub_sample:
         break
 
