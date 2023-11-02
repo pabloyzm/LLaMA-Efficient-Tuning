@@ -164,32 +164,29 @@ for j, example in enumerate(dataset["train"]):
     total_windows = number_of_sequences // context_size
     history = []
     for i in range(total_windows):
-        state = "continue" if i > 0 else "start"
-        if i > 0:
-            context = "\n".join(history)
-        else:
-            context = ""
+        state = "continue" if i > 0 else "end" if i == total_windows-1 else "start"
+        #if i > 0:
+        #    context = "\n".join(history)
+        #else:
+        #    context = ""
         instruction = f"Summarize the following dialogue between '###', make a brief summary on what happens in it, " \
                               f"DON'T complete it just summarize it. " \
-                              f"You'll be given the dialog state, the conversation and the previous dialog summary, which you have to complete. " \
-                              f"If the dialog state is 'start' you won't be given any summary. " \
-                              f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog summary, your summary MUST be coherent, " \
-                              f"consistent and MUST NOT repeat information in the previous summaries. " \
+                              f"You'll be given the dialog state. " \
                               f"Your answer MUST be in this format: " \
                               f"\n\n Summary: ### your summary ### " \
                               f"The Summary MUST be at maximum 100 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
                               f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###" \
-                              f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
+                              # f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
         # output = eval(example["original dialog info"])["summary"]
-        res_ = generate_prediction({"instruction": instruction, "input": "", "output": "", "summary": context})
+        res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
         if state == "start" or state == "continue":
             print("Generating prediction for sample: ", j, ", fragment: ", i)
             history.append(res_)
         elif state == "end":
             history = []
-        json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "context": context, "output": res_})
+        json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "context": history, "output": res_})
     if j == sub_sample:
         break
 
