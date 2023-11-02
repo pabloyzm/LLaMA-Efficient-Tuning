@@ -142,9 +142,9 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
         result = trainer.get_predictions(predict_results)
 
     # return the prediction encoded in <>
-    start_index = result.find('<')
+    #start_index = result.find('<')
     end_index = result.find('>')
-    result = result[start_index + 1 : end_index]
+    result = result[0 : end_index]
     print(result)
     return result
 
@@ -181,8 +181,7 @@ for j, example in enumerate(dataset["train"]):
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
                               f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###" \
-                              f"\n\n Previous summaries: {' '.join(pre for pre in history) if len(history) > 0 else ''} " \
-                              f"\n\n Your summary: "
+                              f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
         # output = eval(example["original dialog info"])["summary"]
         res_ = generate_prediction({"instruction": instruction, "input": "", "output": "", "summary": context})
         if state == "start" or state == "continue":
