@@ -141,7 +141,7 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
         trainer.save_metrics("predict", predict_results.metrics)
         result = trainer.get_predictions(predict_results)
 
-    return dict(result)['summary']
+    return json.loads(result)["summary"]
 
 print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
