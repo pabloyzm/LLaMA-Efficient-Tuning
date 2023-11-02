@@ -84,7 +84,7 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
     prediction_file = os.path.join(output_dir, 'generated_predictions.jsonl')
     with open(prediction_file, 'r') as pred_file:
         prediction = json.loads(pred_file.readline())
-    return prediction['predict']
+    return json.loads(prediction[0]['predict'].replace("'",'"'))['summary']
 
 
 dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum')
@@ -108,11 +108,11 @@ for j, example in enumerate(dataset["train"]):
                               f"DON'T complete it just summarize it. " \
                               f"You'll be given the dialog state and the previous dialog context, which you have to adapt your summary to. " \
                               f"If the dialog state is 'start' you won't be given any context. " \
-                              f"If the dialog state is 'continue' you'll be given the previous dialog contexts, your summary MUST be coherent, " \
+                              f"If the dialog state is 'continue' or 'end' you'll be given the previous dialog contexts, your summary MUST be coherent, " \
                               f"consistent and MUST NOT repeat information in the previous contexts. " \
                               f"Your answer MUST be in JSON format, with the following structure: " \
                               f"{{'summary': 'your summary or continuation'}} " \
-                              f"where 'your summary' is a string with your summary. " \
+                              f"where 'summary' is a string with your summary. " \
                               f"The summary MUST be at maximum 100 words long. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Context: {context} " \
