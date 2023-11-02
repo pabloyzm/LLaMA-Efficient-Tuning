@@ -162,13 +162,10 @@ for j, example in enumerate(dataset["train"]):
     context_size = 10
     number_of_sequences = len(dialog_sequences)
     total_windows = number_of_sequences // context_size
-    #history = []
+    history = []
     for i in range(total_windows):
-        state = "continue" if i > 0 else "end" if i == total_windows-1 else "start"
-        #if i > 0:
-        #    context = "\n".join(history)
-        #else:
-        #    context = ""
+        # the state must be start, continue or end depending on the position of the window
+        state = "continue" if i > 0 and i < total_windows - 1 else "start" if i == 0 else "end"
         instruction = f"Summarize the following dialogue between '###', make a brief summary on what happens in it, " \
                               f"DON'T complete it just summarize it. " \
                               f"You'll be given the dialog state. " \
@@ -183,7 +180,10 @@ for j, example in enumerate(dataset["train"]):
                               # f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
         # output = eval(example["original dialog info"])["summary"]
         res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
-        json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "output": res_})
+        history.append(res_)
+        json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "output": res_, "history": history})
+        if state == "end":
+            history = []
     if j == sub_sample:
         break
 
