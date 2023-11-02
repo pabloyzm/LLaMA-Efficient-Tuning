@@ -53,7 +53,8 @@
     "columns": {
       "prompt": "instruction",
       "query": "input",
-      "response": "output"
+      "response": "output",
+      "summary": "summary"
     }
   },
   "oaast_sft_zh": {

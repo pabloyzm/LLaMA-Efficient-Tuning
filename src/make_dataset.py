@@ -142,9 +142,8 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
         result = trainer.get_predictions(predict_results)
 
     # return the prediction encoded in <>
-    start_index = result.find('<')
     end_index = result.find('>')
-    result = result[start_index+1:end_index]
+    result = result[0:end_index] + "."
     print(result)
     return result
 
@@ -179,11 +178,10 @@ for j, example in enumerate(dataset["train"]):
                               "like this: <your summary>. " \
                               f"The summary MUST be at maximum 50 words long. " \
                               f"\n\n Dialog state: {state} " \
-                              f"\n\n Context: {context} " \
                               f"\n\n Conversation: " \
                               f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###"
         # output = eval(example["original dialog info"])["summary"]
-        res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
+        res_ = generate_prediction({"instruction": instruction, "input": "", "output": "", "summary": context})
         if state == "start" or state == "continue":
             print("Generating prediction for sample: ", j, ", fragment: ", i)
             history.append(res_)
