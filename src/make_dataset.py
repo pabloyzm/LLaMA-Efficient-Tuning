@@ -146,7 +146,7 @@ def generate_prediction(sample_data, model_script='src/train_bash.py', dataset_p
     # end_index = result.find('>')
     # result = result[0 : end_index]
     # print(result)
-    return result
+    return result.replace("Summary:", "").strip()
 
 print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
