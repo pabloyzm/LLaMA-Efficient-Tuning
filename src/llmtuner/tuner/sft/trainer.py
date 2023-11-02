@@ -97,5 +97,5 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         with open(output_prediction_file, "w", encoding="utf-8") as writer:
             res: List[str] = []
             for pred, _ in zip(decoded_preds, decoded_labels):
-                res.append(json.dumps({"predict": pred.replace("'",'"')}, ensure_ascii=False))
+                res.append(json.dumps({"predict": pred.replace('"', "´").replace("'",'"')}, ensure_ascii=False))
             writer.write("\n".join(res))
