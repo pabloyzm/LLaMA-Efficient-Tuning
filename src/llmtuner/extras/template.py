@@ -272,7 +272,7 @@ register_template(
         "<<SYS>>\n{{system}}\n<</SYS>>\n\n"
     ],
     prompt=[
-        "[INST] {{query}} [/INST] "
+        "[INST] {{query}} [/INST] Summary:"
     ],
     system=(
         "You are a helpful, respectful and honest assistant. "
