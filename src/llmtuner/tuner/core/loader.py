@@ -166,7 +166,7 @@ def load_model_and_tokenizer(
         if model_args.quantization_bit == 8:
             require_version("bitsandbytes>=0.37.0", "To fix: pip install bitsandbytes>=0.37.0")
             config_kwargs["load_in_8bit"] = True
-            config_kwargs["quantization_config"] = BitsAndBytesConfig(load_in_8bit=True, disable_exllama=True)
+            config_kwargs["quantization_config"] = BitsAndBytesConfig(load_in_8bit=True)
 
         elif model_args.quantization_bit == 4:
             require_version("bitsandbytes>=0.39.0", "To fix: pip install bitsandbytes>=0.39.0")
@@ -175,14 +175,14 @@ def load_model_and_tokenizer(
                 load_in_4bit=True,
                 bnb_4bit_compute_dtype=model_args.compute_dtype,
                 bnb_4bit_use_double_quant=model_args.double_quantization,
-                bnb_4bit_quant_type=model_args.quantization_type,
-                disable_exllama=True
+                bnb_4bit_quant_type=model_args.quantization_type
             )
 
         is_mergeable = False
         config_kwargs["device_map"] = {"": int(os.environ.get("LOCAL_RANK", "0"))} if is_trainable else "auto"
         logger.info("Quantizing model to {} bit.".format(model_args.quantization_bit))
 
+    config_kwargs["quantization_config"] = BitsAndBytesConfig(disable_exllama=True)
     # Load and prepare pre-trained models (without valuehead).
     model = AutoModelForCausalLM.from_pretrained(
         model_to_load,
