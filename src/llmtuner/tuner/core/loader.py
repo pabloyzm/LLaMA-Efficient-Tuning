@@ -191,7 +191,7 @@ def load_model_and_tokenizer(
     )
     if model_args.quantization_bit is not None:
         if model_args.quantization_bit == 4:
-            model = PeftModel(model, 'uwnlp/llama-2-70b-qlora-openorca')
+            model = PeftModel.from_pretrained(model, 'uwnlp/llama-2-70b-qlora-openorca')
 
     # Disable custom generate method (for Qwen and Baichuan2)
     if isinstance(model, PreTrainedModel) and "GenerationMixin" not in str(model.generate.__func__):
