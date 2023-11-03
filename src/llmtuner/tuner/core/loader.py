@@ -187,7 +187,6 @@ def load_model_and_tokenizer(
         model_to_load,
         config=config,
         low_cpu_mem_usage=(not is_deepspeed_zero3_enabled()),
-        device_map='cuda',
         **config_kwargs
     )
     # if model_args.quantization_bit is not None:
