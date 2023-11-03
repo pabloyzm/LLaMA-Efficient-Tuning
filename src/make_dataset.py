@@ -152,7 +152,7 @@ print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
 dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum')
-sub_sample = 0
+sub_sample = 1000
 json_output = []
 
 print("Generating samples... \n")
@@ -178,8 +178,9 @@ for j, example in enumerate(dataset["train"]):
                               f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###" \
                               # f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
         # output = eval(example["original dialog info"])["summary"]
-        res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
-        json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "output": res_})
+        # res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
+        # json_output.append({"instruction": instruction, "input": "", "id": j, "state": state, "output": res_})
+        json_output.append({"instruction": instruction, "input": "", "output": "", "id": j, "state": state})
     if j == sub_sample:
         break
 
