@@ -152,7 +152,7 @@ print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
 dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum')
-sub_sample = 1000
+sub_sample = 10
 json_output = []
 
 print("Generating samples... \n")
@@ -169,13 +169,13 @@ for j, example in enumerate(dataset["train"]):
                               f"DON'T complete it just summarize it. " \
                               f"You'll be given the dialog state. " \
                               f"Your answer MUST be in this format: " \
-                              f"\n\n Summary: ### your summary ### " \
-                              f"The Summary MUST be at maximum 100 words long. " \
+                              f"\n\n Summary:  {{your summary}} " \
+                              f"\n\n The Summary MUST be at maximum 100 words long. " \
                               f"Your answer MUST contain the summary and ONLY the summary. " \
                               f"Do NOT include any other information. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
-                              f"###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n ###" \
+                              f"\n\n###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n###" \
                               # f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
         # output = eval(example["original dialog info"])["summary"]
         # res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})
