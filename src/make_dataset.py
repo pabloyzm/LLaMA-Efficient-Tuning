@@ -154,6 +154,7 @@ dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum')
 sub_sample = 10
 json_output = []
+separator = "\n"
 
 print("Generating samples... \n")
 for j, example in enumerate(dataset["train"]):
@@ -175,7 +176,7 @@ for j, example in enumerate(dataset["train"]):
                               f"Do NOT include any other information. " \
                               f"\n\n Dialog state: {state} " \
                               f"\n\n Conversation: " \
-                              f"\n\n###\n\n  {' '.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n###" \
+                              f"\n\n###\n\n  {separator.join(dialog_sequences[i * context_size:(i + 1) * context_size])} \n\n###" \
                               # f"\n\n Previous summaries: ''' {' '.join(pre for pre in history) if len(history) > 0 else ''} ''' "
         # output = eval(example["original dialog info"])["summary"]
         # res_ = generate_prediction({"instruction": instruction, "input": "", "output": ""})

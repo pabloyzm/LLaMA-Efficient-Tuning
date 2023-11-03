@@ -35,6 +35,7 @@ if TYPE_CHECKING:
     from transformers import PreTrainedTokenizer
     from llmtuner.hparams import ModelArguments
 
+from peft import PeftModel
 
 logger = get_logger(__name__)
 
@@ -188,6 +189,9 @@ def load_model_and_tokenizer(
         low_cpu_mem_usage=(not is_deepspeed_zero3_enabled()),
         **config_kwargs
     )
+    if model_args.quantization_bit is not None:
+        if model_args.quantization_bit == 4:
+            model = PeftModel(model, 'uwnlp/llama-2-70b-qlora-openorca')
 
     # Disable custom generate method (for Qwen and Baichuan2)
     if isinstance(model, PreTrainedModel) and "GenerationMixin" not in str(model.generate.__func__):
