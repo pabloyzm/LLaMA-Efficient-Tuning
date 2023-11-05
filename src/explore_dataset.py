@@ -130,7 +130,7 @@ df_cluster = []
 for j, example in enumerate(mediasum_dataset["validation"]):
     summary = eval(example["original dialog info"])["summary"]
     embedding = model.encode(summary)
-    df_aux = pd.DataFrame(embedding.resize(-1,1), index=[0], columns=range(len(embedding)))
+    df_aux = pd.DataFrame(np.reshape(embedding, (-1,1)), index=[0], columns=range(len(embedding)))
     df_cluster.append(df_aux)
 
 df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
