@@ -1,13 +1,10 @@
 from datasets import load_dataset
-import json
-
-from llmtuner.tuner.core import get_train_args
-from llmtuner.dsets import get_dataset, preprocess_dataset
-from llmtuner.tuner.core import load_model_and_tokenizer
+import numpy as np
 
 
 print("Loading dataset... \n")
 # load dataset avoiding timeout and print progress
+#mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='mnt/c/Users/pyanez/Desktop/pablo/universidad/memoria/src/data/downloads')
 mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', split='validation')
 json_output = []
@@ -20,13 +17,6 @@ for j, example in enumerate(mediasum_dataset["validation"]):
     if j == max_samples:
         break
 
-
-
-# print("Saving samples... \n")
-# with open('data/mediasum.json', 'w') as outfile:
-#     json.dump(json_output, outfile, indent=4)
-#
-#
 dataset_path= 'data'
 output_dir= 'predictions'
 target_dataset = "mediasum"
@@ -44,8 +34,10 @@ args = {
     "predict_with_generate": True,
     "cutoff_len": 4000
 }
-model_args, data_args, training_args, finetuning_args, generating_args, general_args = get_train_args(args)
-_, tokenizer = load_model_and_tokenizer(model_args, finetuning_args, training_args.do_train, stage="sft")
+
+from transformers import AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained(args["model_name_or_path"], use_fast=True, token = "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",
+                                          cache_dir="data", trust_remote_code=True)
 
 lengths = []
 # print("Counting inputs_ids... \n")
@@ -53,47 +45,21 @@ for i, example in enumerate(json_output):
     inputs_id = tokenizer.encode(example["instruction"], add_special_tokens=True)
     lengths.append(len(inputs_id))
 
-
-#
-# print("Exploring dataset... \n")
-# dataset = get_dataset(model_args, data_args)
-# dataset = preprocess_dataset(dataset, tokenizer, data_args, training_args, stage="sft")
-
-
-# console:
-# Dataset({
-#     features: ['input_ids', 'attention_mask', 'labels'],
-#     num_rows: 1
-# })
-
-# get all input_ids lengths
-# lengths = []
-# for i in range(len(dataset)):
-#     lengths.append(len(dataset[i]['input_ids']))
-
 # get max length
 max_len = max(lengths)
 print("*"*100)
 print("max len: ")
 print(max_len)
 print("*"*100)
-
-# get min length
-print("*"*100)
 min_len = min(lengths)
 print("min len: ")
 print(min_len)
-print("*"*100)
-
-# print mean and std
 print("*"*100)
 print("mean: ")
 print(sum(lengths)/len(lengths))
 print("*"*100)
 print("std: ")
-import numpy as np
 print(np.std(lengths))
-print("*"*100)
 
 
 
