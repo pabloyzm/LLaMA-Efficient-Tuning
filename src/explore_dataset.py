@@ -48,12 +48,12 @@ tokenizer = AutoTokenizer.from_pretrained(args["model_name_or_path"], use_fast=T
 
 lengths = []
 import pandas as pd
-df = pd.DataFrame({"lenghts": lengths})
 # print("Counting inputs_ids... \n")
 for i, example in enumerate(json_output):
     inputs_id = tokenizer.encode(example["instruction"], add_special_tokens=True)
     lengths.append(len(inputs_id))
 
+df = pd.DataFrame({"lenghts": lengths})
 # get max length
 max_len = max(lengths)
 print("*"*100)
