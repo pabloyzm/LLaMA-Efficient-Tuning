@@ -129,7 +129,7 @@ print("Evaluating clusters... \n")
 df_cluster = []
 for j, example in enumerate(mediasum_dataset["validation"]):
     summary = eval(example["original dialog info"])["summary"]
-    embedding = model(summary)
+    embedding = model([summary])
     df_aux = pd.DataFrame(embedding, index=[0], columns=range(len(embedding)))
     df_cluster.append(df_aux)
 
@@ -138,7 +138,8 @@ df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
 from sklearn.cluster import KMeans
 
 SSE = []
-for k in range(4,10):
+numClusters = [i for i in range(4,10)]
+for k in numClusters:
     k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
     k_means.fit(df_cluster)
     SSE.append(k_means.inertia_)
