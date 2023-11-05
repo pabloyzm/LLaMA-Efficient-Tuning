@@ -122,4 +122,30 @@ print("filter samples: ", len(lengths))
 
 
 
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
+
+print("Evaluating clusters... \n")
+df_cluster = []
+for j, example in enumerate(mediasum_dataset["validation"]):
+    summary = eval(example["original dialog info"])["summary"]
+    embedding = model(summary)
+    df_aux = pd.DataFrame(embedding, index=[0], columns=range(len(embedding)))
+    df_cluster.append(df_aux)
+
+df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
+
+from sklearn.cluster import KMeans
+
+SSE = []
+for k in range(4,10):
+    k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
+    k_means.fit(df_cluster)
+    SSE.append(k_means.inertia_)
+
+variation = [(SSE[i] - SSE[i+1])/ SSE[i] * 100 for i in range(len(SSE)-1)]
+n_clusters = numClusters[variation.index(max(variation)) + 1]
+print(f"El número óptimo de clusters es {n_clusters}")
+
+
 
