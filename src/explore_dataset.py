@@ -129,7 +129,7 @@ print("Evaluating clusters... \n")
 df_cluster = []
 for j, example in enumerate(mediasum_dataset["validation"]):
     summary = eval(example["original dialog info"])["summary"]
-    embedding = model([summary])
+    embedding = model.encode(summary)
     df_aux = pd.DataFrame(embedding, index=[0], columns=range(len(embedding)))
     df_cluster.append(df_aux)
 
