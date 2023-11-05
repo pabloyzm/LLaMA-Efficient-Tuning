@@ -11,7 +11,7 @@ print("Loading dataset... \n")
 mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', split='validation')
 json_output = []
-max_samples = 10
+max_samples = 100
 
 print("Generating samples... \n")
 for j, example in enumerate(mediasum_dataset["validation"]):
@@ -20,15 +20,17 @@ for j, example in enumerate(mediasum_dataset["validation"]):
     if j == max_samples:
         break
 
-print("Saving samples... \n")
-with open('data/mediasum.json', 'w') as outfile:
-    json.dump(json_output, outfile, indent=4)
 
 
+# print("Saving samples... \n")
+# with open('data/mediasum.json', 'w') as outfile:
+#     json.dump(json_output, outfile, indent=4)
+#
+#
 dataset_path= 'data'
 output_dir= 'predictions'
 target_dataset = "mediasum"
-
+#
 args = {
     "stage": "sft",
     "model_name_or_path": "meta-llama/Llama-2-7b-chat-hf",
@@ -45,11 +47,19 @@ args = {
 model_args, data_args, training_args, finetuning_args, generating_args, general_args = get_train_args(args)
 _, tokenizer = load_model_and_tokenizer(model_args, finetuning_args, training_args.do_train, stage="sft")
 
-print("Exploring dataset... \n")
-dataset = get_dataset(model_args, data_args)
-dataset = preprocess_dataset(dataset, tokenizer, data_args, training_args, stage="sft")
+lengths = []
+# print("Counting inputs_ids... \n")
+for i, example in enumerate(json_output):
+    inputs_id = tokenizer.encode(example["instruction"], add_special_tokens=True)
+    lengths.append(len(inputs_id))
 
-print(dataset)
+
+#
+# print("Exploring dataset... \n")
+# dataset = get_dataset(model_args, data_args)
+# dataset = preprocess_dataset(dataset, tokenizer, data_args, training_args, stage="sft")
+
+
 # console:
 # Dataset({
 #     features: ['input_ids', 'attention_mask', 'labels'],
@@ -57,23 +67,35 @@ print(dataset)
 # })
 
 # get all input_ids lengths
-lengths = []
-for i in range(len(dataset)):
-    lengths.append(len(dataset[i]['input_ids']))
+# lengths = []
+# for i in range(len(dataset)):
+#     lengths.append(len(dataset[i]['input_ids']))
 
 # get max length
 max_len = max(lengths)
+print("*"*100)
+print("max len: ")
 print(max_len)
+print("*"*100)
 
 # get min length
+print("*"*100)
 min_len = min(lengths)
+print("min len: ")
+print(min_len)
+print("*"*100)
 
-# import numpy as np
-# import matplotlib.pyplot as plt
-#
-# # plot histogram
-# plt.hist(lengths, bins=np.arange(min_len, max_len + 1))
-# plt.show()
+# print mean and std
+print("*"*100)
+print("mean: ")
+print(sum(lengths)/len(lengths))
+print("*"*100)
+print("std: ")
+import numpy as np
+print(np.std(lengths))
+print("*"*100)
+
+
 
 
 
