@@ -46,13 +46,18 @@ from transformers import AutoTokenizer
 tokenizer = AutoTokenizer.from_pretrained(args["model_name_or_path"], use_fast=True, token = "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",
                                           cache_dir="data", trust_remote_code=True)
 
-lengths = []
+lengths = {j:0 for j in list(set([example["id"] for example in json_output]))}
 import pandas as pd
 # print("Counting inputs_ids... \n")
-for i, example in enumerate(json_output):
+dialog_index = 0
+for example in json_output:
+    if example["id"] > dialog_index:
+        dialog_index = example["id"]
     inputs_id = tokenizer.encode(example["instruction"], add_special_tokens=True)
-    lengths.append(len(inputs_id))
+    if len(inputs_id) > lengths[dialog_index]:
+        lengths[dialog_index] = len(inputs_id)
 
+lengths = [v for v in lengths.values()]
 df = pd.DataFrame({"lenghts": lengths})
 # get max length
 max_len = max(lengths)
