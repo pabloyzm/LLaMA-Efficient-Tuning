@@ -8,7 +8,7 @@ print("Loading dataset... \n")
 mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', split='validation')
 json_output = []
-max_samples = 100
+max_samples = 10000
 separator = "\n"
 
 print("Generating samples... \n")
