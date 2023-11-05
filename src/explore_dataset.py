@@ -82,6 +82,7 @@ print(df.kurt())
 # identify outliers
 cut_off = std_ * 2
 lower, upper = mean_ - cut_off, mean_ + cut_off
+print(lower, upper)
 
 lengths = [x for x in lengths if x > lower or x < upper]
 
