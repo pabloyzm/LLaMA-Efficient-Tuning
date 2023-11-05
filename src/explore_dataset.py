@@ -12,6 +12,7 @@ max_samples = 10000
 separator = "\n"
 
 print("Generating samples... \n")
+print(len(mediasum_dataset["validation"]))
 for j, example in enumerate(mediasum_dataset["validation"]):
     prompt = "\n".join([seq for seq in eval(example["original dialog info"])["dialog history"]])
     dialog_sequences = prompt.split('\n')
