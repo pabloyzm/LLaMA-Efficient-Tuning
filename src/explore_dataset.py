@@ -15,7 +15,7 @@ print("Generating samples... \n")
 for j, example in enumerate(mediasum_dataset["validation"]):
     prompt = "\n".join([seq for seq in eval(example["original dialog info"])["dialog history"]])
     dialog_sequences = prompt.split('\n')
-    context_size = 5
+    context_size = 10
     number_of_sequences = len(dialog_sequences)
     total_windows = number_of_sequences // context_size
     for i in range(total_windows):
@@ -77,10 +77,11 @@ print(df.skew())
 print("*"*100)
 print("kurtosis: ")
 print(df.kurt())
-
+print("*"*100)
+print("samples: ", len(lengths))
 
 # identify outliers
-cut_off = std_ * 2
+cut_off = std_ * 3
 lower, upper = mean_ - cut_off, mean_ + cut_off
 #print(lower, upper)
 
