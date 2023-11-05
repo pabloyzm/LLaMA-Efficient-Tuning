@@ -83,7 +83,7 @@ print(df.kurt())
 cut_off = std_ * 3
 lower, upper = mean_ - cut_off, mean_ + cut_off
 
-lengths = [x for x in lengths if x < lower or x > upper]
+lengths = [x for x in lengths if x > lower or x < upper]
 
 df = pd.DataFrame({"lenghts": lengths})
 # get max length
