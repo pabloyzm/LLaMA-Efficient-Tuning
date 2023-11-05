@@ -50,6 +50,30 @@ dataset = get_dataset(model_args, data_args)
 dataset = preprocess_dataset(dataset, tokenizer, data_args, training_args, stage="sft")
 
 print(dataset)
+# console:
+# Dataset({
+#     features: ['input_ids', 'attention_mask', 'labels'],
+#     num_rows: 1
+# })
+
+# get all input_ids lengths
+lengths = []
+for i in range(len(dataset)):
+    lengths.append(len(dataset[i]['input_ids']))
+
+# get max length
+max_len = max(lengths)
+print(max_len)
+
+# get min length
+min_len = min(lengths)
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+#
+# # plot histogram
+# plt.hist(lengths, bins=np.arange(min_len, max_len + 1))
+# plt.show()
 
 
 
