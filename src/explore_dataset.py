@@ -82,7 +82,7 @@ print(df.kurt())
 # identify outliers
 cut_off = std_ * 2
 lower, upper = mean_ - cut_off, mean_ + cut_off
-print(lower, upper)
+#print(lower, upper)
 
 lengths = [x for x in lengths if lower < x < upper]
 
@@ -110,6 +110,8 @@ print(df.skew())
 print("*"*100)
 print("kurtosis: ")
 print(df.kurt())
+print("*"*100)
+print("filter samples: ", len(lengths))
 
 
 
