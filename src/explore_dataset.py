@@ -65,10 +65,12 @@ print("min len: ")
 print(min_len)
 print("*"*100)
 print("mean: ")
-print(sum(lengths)/len(lengths))
+mean_ = sum(lengths)/len(lengths)
+print(mean_)
 print("*"*100)
 print("std: ")
-print(np.std(lengths))
+std_ = np.std(lengths)
+print(std_)
 print("*"*100)
 print("skew: ")
 print(df.skew())
@@ -77,7 +79,36 @@ print("kurtosis: ")
 print(df.kurt())
 
 
+# identify outliers
+cut_off = std_ * 3
+lower, upper = mean_ - cut_off, mean_ + cut_off
 
+lengths = [x for x in lengths if x < lower or x > upper]
+
+df = pd.DataFrame({"lenghts": lengths})
+# get max length
+max_len = max(lengths)
+print("*"*100)
+print("max len: ")
+print(max_len)
+print("*"*100)
+min_len = min(lengths)
+print("min len: ")
+print(min_len)
+print("*"*100)
+print("mean: ")
+mean_ = sum(lengths)/len(lengths)
+print(mean_)
+print("*"*100)
+print("std: ")
+std_ = np.std(lengths)
+print(std_)
+print("*"*100)
+print("skew: ")
+print(df.skew())
+print("*"*100)
+print("kurtosis: ")
+print(df.kurt())
 
 
 
