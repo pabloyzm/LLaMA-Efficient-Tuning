@@ -71,10 +71,10 @@ print("std: ")
 print(np.std(lengths))
 print("*"*100)
 print("skew: ")
-print(df.skew)
+print(df.skew())
 print("*"*100)
 print("kurtosis: ")
-print(df.kurt)
+print(df.kurt())
 
 
 
