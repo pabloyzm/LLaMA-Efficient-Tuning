@@ -138,7 +138,7 @@ df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
 from sklearn.cluster import KMeans
 
 SSE = []
-numClusters = [i for i in range(4,10)]
+numClusters = [i for i in range(4,30)]
 for k in numClusters:
     k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
     k_means.fit(df_cluster)
