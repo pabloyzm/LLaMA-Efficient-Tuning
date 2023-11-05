@@ -8,12 +8,19 @@ print("Loading dataset... \n")
 mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', split='validation')
 json_output = []
-max_samples = 100
+max_samples = 1000
+separator = "\n"
 
 print("Generating samples... \n")
 for j, example in enumerate(mediasum_dataset["validation"]):
     prompt = "\n".join([seq for seq in eval(example["original dialog info"])["dialog history"]])
-    json_output.append({"instruction": prompt, "input": "", "output": "", "id": j})
+    dialog_sequences = prompt.split('\n')
+    context_size = 10
+    number_of_sequences = len(dialog_sequences)
+    total_windows = number_of_sequences // context_size
+    for i in range(total_windows):
+        sequences = f"{separator.join(dialog_sequences[i * context_size:(i + 1) * context_size])}"
+        json_output.append({"instruction": sequences, "input": "", "output": "", "id": j})
     if j == max_samples:
         break
 
