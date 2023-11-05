@@ -8,14 +8,14 @@ print("Loading dataset... \n")
 mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', split='validation')
 json_output = []
-max_samples = 1000
+max_samples = 10000
 separator = "\n"
 
 print("Generating samples... \n")
 for j, example in enumerate(mediasum_dataset["validation"]):
     prompt = "\n".join([seq for seq in eval(example["original dialog info"])["dialog history"]])
     dialog_sequences = prompt.split('\n')
-    context_size = 10
+    context_size = 5
     number_of_sequences = len(dialog_sequences)
     total_windows = number_of_sequences // context_size
     for i in range(total_windows):
@@ -47,6 +47,8 @@ tokenizer = AutoTokenizer.from_pretrained(args["model_name_or_path"], use_fast=T
                                           cache_dir="data", trust_remote_code=True)
 
 lengths = []
+import pandas as pd
+df = pd.DataFrame({"lenghts": lengths})
 # print("Counting inputs_ids... \n")
 for i, example in enumerate(json_output):
     inputs_id = tokenizer.encode(example["instruction"], add_special_tokens=True)
@@ -67,6 +69,13 @@ print(sum(lengths)/len(lengths))
 print("*"*100)
 print("std: ")
 print(np.std(lengths))
+print("*"*100)
+print("skew: ")
+print(df.skew)
+print("*"*100)
+print("kurtosis: ")
+print(df.kurt)
+
 
 
 
