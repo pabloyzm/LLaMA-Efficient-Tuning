@@ -143,7 +143,7 @@ if not os.path.exists(f"kmeans/summary_embeddings_{split}.csv"):
     df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
     df_cluster.to_csv(f"kmeans/summary_embeddings_{split}.csv", sep=";", index=False)
 else:
-    df_cluster = pd.read_csv(f"kmeans/summary_embeddings_{split}.csv", sep=";", )
+    df_cluster = pd.read_csv(f"kmeans/summary_embeddings_{split}.csv", sep=";")
 
 from sklearn.cluster import MiniBatchKMeans, KMeans
 
