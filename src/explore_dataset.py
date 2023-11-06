@@ -1,3 +1,6 @@
+import os.path
+
+import joblib
 from datasets import load_dataset
 import numpy as np
 
@@ -137,21 +140,27 @@ df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
 
 from sklearn.cluster import KMeans
 
-SSE = []
-numClusters = [i for i in range(4,30)]
-for k in numClusters:
-    k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
-    k_means.fit(df_cluster)
-    SSE.append(k_means.inertia_)
+find = False
 
-print(SSE)
+if find:
+    SSE = []
+    numClusters = [i for i in range(4,30)]
+    for k in numClusters:
+        k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
+        k_means.fit(df_cluster)
+        SSE.append(k_means.inertia_)
+    variation = [(SSE[i] - SSE[i+1])/ SSE[i] * 100 for i in range(len(SSE)-1)]
+    n_clusters = numClusters[variation.index(max(variation)) + 1]
+    print(f"El número óptimo de clusters es {n_clusters}")
 
-variation = [(SSE[i] - SSE[i+1])/ SSE[i] * 100 for i in range(len(SSE)-1)]
-n_clusters = numClusters[variation.index(max(variation)) + 1]
-print(f"El número óptimo de clusters es {n_clusters}")
+if not os.path.exists("kmeans/model.pkl"):
+    k_means = KMeans(n_clusters=5, n_init=10, random_state=1)
+    clusters_ = k_means.fit_predict(df_cluster)
+    joblib.dump(k_means, "kmeans/model.pkl")
+else:
+    k_means = joblib.load("kmeans/model.pkl")
+    clusters_ = k_means.predict(df_cluster)
 
-k_means = KMeans(n_clusters=n_clusters, n_init=10, random_state=1)
-clusters_ = k_means.fit_predict(df_cluster)
-print(set(clusters_))
+print(pd.DataFrame({"clusters": clusters_}).value_counts())
 
 
