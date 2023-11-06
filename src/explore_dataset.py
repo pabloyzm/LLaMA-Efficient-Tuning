@@ -144,9 +144,14 @@ for k in numClusters:
     k_means.fit(df_cluster)
     SSE.append(k_means.inertia_)
 
+print(SSE)
+
 variation = [(SSE[i] - SSE[i+1])/ SSE[i] * 100 for i in range(len(SSE)-1)]
 n_clusters = numClusters[variation.index(max(variation)) + 1]
 print(f"El número óptimo de clusters es {n_clusters}")
 
+k_means = KMeans(n_clusters=n_clusters, n_init=10, random_state=1)
+clusters_ = k_means.fit_predict(df_cluster)
+print(set(clusters_))
 
 
