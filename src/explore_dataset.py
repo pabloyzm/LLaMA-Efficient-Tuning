@@ -129,30 +129,35 @@ print("filter samples: ", len(lengths))
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
 
+split = "train"
+
 print("Evaluating clusters... \n")
-if not os.path.exists("kmeans/summary_embeddings.csv"):
+if not os.path.exists(f"kmeans/summary_embeddings_{split}.csv"):
     df_cluster = []
-    for j, example in tqdm.tqdm(enumerate(mediasum_dataset["train"])):
+    for example in tqdm.tqdm(mediasum_dataset[split]):
         summary = eval(example["original dialog info"])["summary"]
         embedding = model.encode(summary)
         df_aux = pd.DataFrame(np.reshape(embedding, (1,-1)), index=[0], columns=range(len(embedding)))
         df_cluster.append(df_aux)
 
     df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
-    df_cluster.to_csv("kmeans/summary_embeddings.csv", sep=";", index=False)
+    df_cluster.to_csv(f"kmeans/summary_embeddings_{split}.csv", sep=";", index=False)
 else:
-    df_cluster = pd.read_csv("kmeans/summary_embeddings.csv")
+    df_cluster = pd.read_csv(f"kmeans/summary_embeddings_{split}.csv")
 
-from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans, KMeans
 
-find = True
+find = False
 
 if find:
     SSE = []
     numClusters = [i for i in range(2,30)]
     for k in tqdm.tqdm(numClusters):
-        k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
-        k_means.fit(df_cluster)
+        k_means = MiniBatchKMeans(n_clusters=k, n_init=10, random_state=1, batch_size=4096)
+        chunk_iter = pd.read_csv(f'f"kmeans/summary_embeddings_{split}.csv"', chunksize=50000)
+        for chunk in chunk_iter:
+            chunk = chunk.drop(columns=['image_name', 'class'])
+            k_means.partial_fit(chunk)
         SSE.append(k_means.inertia_)
     variation = [(SSE[i] - SSE[i+1])/ SSE[i] * 100 for i in range(len(SSE)-1)]
     n_clusters = numClusters[variation.index(max(variation)) + 1]
