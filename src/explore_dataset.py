@@ -12,7 +12,7 @@ print("Loading dataset... \n")
 mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', cache_dir='data')
 #mediasum_dataset = load_dataset('Salesforce/dialogstudio', 'MediaSum', split='validation')
 json_output = []
-max_samples = 10000
+max_samples = 10
 separator = "\n"
 
 print("Generating samples... \n")
@@ -143,7 +143,7 @@ if not os.path.exists(f"kmeans/summary_embeddings_{split}.csv"):
     df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
     df_cluster.to_csv(f"kmeans/summary_embeddings_{split}.csv", sep=";", index=False)
 else:
-    df_cluster = pd.read_csv(f"kmeans/summary_embeddings_{split}.csv", sep=";", header=False)
+    df_cluster = pd.read_csv(f"kmeans/summary_embeddings_{split}.csv", sep=";", header=None)
 
 from sklearn.cluster import MiniBatchKMeans, KMeans
 
