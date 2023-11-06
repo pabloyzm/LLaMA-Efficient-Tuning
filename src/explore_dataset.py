@@ -154,7 +154,7 @@ if find:
     numClusters = [i for i in range(2,30)]
     for k in tqdm.tqdm(numClusters):
         k_means = MiniBatchKMeans(n_clusters=k, n_init=10, random_state=1, batch_size=4096)
-        chunk_iter = pd.read_csv(f"kmeans/summary_embeddings_{split}.csv", chunksize=50000)
+        chunk_iter = pd.read_csv(f"kmeans/summary_embeddings_{split}.csv", chunksize=50000, sep=";", names=[i for i in range(768)])
         for chunk in chunk_iter:
             #chunk = chunk.drop(columns=['image_name', 'class'])
             k_means.partial_fit(chunk)
