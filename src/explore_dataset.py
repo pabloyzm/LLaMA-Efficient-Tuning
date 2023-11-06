@@ -131,13 +131,14 @@ model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
 
 print("Evaluating clusters... \n")
 df_cluster = []
-for j, example in enumerate(mediasum_dataset["train"]):
+for j, example in tqdm.tqdm(enumerate(mediasum_dataset["train"])):
     summary = eval(example["original dialog info"])["summary"]
     embedding = model.encode(summary)
     df_aux = pd.DataFrame(np.reshape(embedding, (1,-1)), index=[0], columns=range(len(embedding)))
     df_cluster.append(df_aux)
 
 df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
+df_cluster.to_csv("kmeans/summary_embeddings.csv", sep=",", index=False)
 
 from sklearn.cluster import KMeans
 
