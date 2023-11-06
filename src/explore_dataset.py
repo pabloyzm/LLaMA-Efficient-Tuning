@@ -130,7 +130,7 @@ model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
 
 print("Evaluating clusters... \n")
 df_cluster = []
-for j, example in enumerate(mediasum_dataset["validation"]):
+for j, example in enumerate(mediasum_dataset["train"]):
     summary = eval(example["original dialog info"])["summary"]
     embedding = model.encode(summary)
     df_aux = pd.DataFrame(np.reshape(embedding, (1,-1)), index=[0], columns=range(len(embedding)))
@@ -140,11 +140,11 @@ df_cluster = pd.concat(df_cluster, axis=0).reset_index(drop = True)
 
 from sklearn.cluster import KMeans
 
-find = False
+find = True
 
 if find:
     SSE = []
-    numClusters = [i for i in range(4,30)]
+    numClusters = [i for i in range(2,30)]
     for k in numClusters:
         k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
         k_means.fit(df_cluster)
@@ -152,9 +152,7 @@ if find:
     variation = [(SSE[i] - SSE[i+1])/ SSE[i] * 100 for i in range(len(SSE)-1)]
     n_clusters = numClusters[variation.index(max(variation)) + 1]
     print(f"El número óptimo de clusters es {n_clusters}")
-
-if not os.path.exists("kmeans/model.pkl"):
-    k_means = KMeans(n_clusters=5, n_init=10, random_state=1)
+    k_means = KMeans(n_clusters=n_clusters, n_init=10, random_state=1)
     clusters_ = k_means.fit_predict(df_cluster)
     joblib.dump(k_means, "kmeans/model.pkl")
 else:
