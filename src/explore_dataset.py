@@ -147,7 +147,7 @@ else:
 
 from sklearn.cluster import MiniBatchKMeans, KMeans
 
-find = False
+find = True
 
 if find:
     SSE = []
@@ -156,7 +156,7 @@ if find:
         k_means = MiniBatchKMeans(n_clusters=k, n_init=10, random_state=1, batch_size=4096)
         chunk_iter = pd.read_csv(f'f"kmeans/summary_embeddings_{split}.csv"', chunksize=50000)
         for chunk in chunk_iter:
-            chunk = chunk.drop(columns=['image_name', 'class'])
+            #chunk = chunk.drop(columns=['image_name', 'class'])
             k_means.partial_fit(chunk)
         SSE.append(k_means.inertia_)
     variation = [(SSE[i] - SSE[i+1])/ SSE[i] * 100 for i in range(len(SSE)-1)]
