@@ -1,6 +1,7 @@
 import os.path
 
 import joblib
+import tqdm
 from datasets import load_dataset
 import numpy as np
 
@@ -145,7 +146,7 @@ find = True
 if find:
     SSE = []
     numClusters = [i for i in range(2,30)]
-    for k in numClusters:
+    for k in tqdm.tqdm(numClusters):
         k_means = KMeans(n_clusters=k, n_init=10, random_state=1)
         k_means.fit(df_cluster)
         SSE.append(k_means.inertia_)
