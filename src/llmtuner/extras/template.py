@@ -267,7 +267,7 @@ Supports: https://huggingface.co/meta-llama/Llama-2-7b-chat-hf
           https://huggingface.co/meta-llama/Llama-2-70b-chat-hf
 """
 register_template(
-    name="llama2",
+    name="llama2_ex",
     prefix=[
         "<<SYS>>\n{{system}}\n<</SYS>>\n\n"
     ],
@@ -280,6 +280,23 @@ register_template(
         "You are not allowed to ask questions to the user."
         "You MUST NOT complete the dialog."
         "You MUST response ONLY and ONLY in the format asked by the user."
+    ),
+    sep=[]
+)
+
+register_template(
+    name="llama2",
+    prefix=[
+        "<<SYS>>\n{{system}}\n<</SYS>>\n\n"
+    ],
+    prompt=[
+        "[INST] {{query}} [/INST] Summary:"
+    ],
+    system=(
+        "As an assistant, your primary goal is to create summaries of dialogues that align with Rouge and BERTScore metrics. "
+        "Focus on capturing the essence of the dialogue without adding new content. "
+        "Summaries should highlight key phrases and maintain semantic coherence. "
+        "Refrain from querying the user and adhere strictly to the response format specified."
     ),
     sep=[]
 )
